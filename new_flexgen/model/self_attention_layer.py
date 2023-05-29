@@ -177,7 +177,7 @@ class SelfAttention:
     def forward(self, hidden, cache_read_buf, weight_read_buf, attention_mask,
                 cache_write_buf, i, k):
         n_head = self.config.n_head
-        print('------------------************   number of head')
+        print('------------------************   number of head', n_head)
 
         donate = [False] * 14
         h, donate[0] = hidden.val, True
