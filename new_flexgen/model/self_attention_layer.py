@@ -1,9 +1,13 @@
-from flexgen.pytorch_backend import (TorchDevice, TorchDisk, TorchLink,
-    TorchMixedDevice, DeviceType, general_copy, fix_recursive_import)
-import dataclasses
+# from flexgen.pytorch_backend import (TorchDevice, TorchDisk, TorchLink,
+#     TorchMixedDevice, DeviceType, general_copy, fix_recursive_import)
+# import dataclasses
 import os
 import numpy as np
-from utils import torch_dtype_to_np_dtype, init_weight_list 
+import sys
+# sys.path.insert(0,'../flexgen_additional/')
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/flexgen_additional')
+from flexgen_utils import torch_dtype_to_np_dtype, init_weight_list 
+from pytorch_backend import TorchDevice, TorchDisk, TorchLink,TorchMixedDevice, DeviceType, general_copy, fix_recursive_import
 DUMMY_WEIGHT = "_DUMMY_"  # Use dummy weights for benchmark purposes
 
 
@@ -195,21 +199,27 @@ class SelfAttention:
         if i == 0:  # prefill
             print('self attention prefill--------')
             self.prefill = True
+            
             mask, donate[1] = attention_mask.val.smart_copy(self.compute)
+            
             h, new_k_cache, new_v_cache = self.compute.mha(h, mask, w_q, b_q,
                 w_k, b_k, w_v, b_v, w_out, b_out, w_ln, b_ln, n_head, donate,
                 self.policy.compress_cache, self.policy.comp_cache_config)
+            
             cache_write_buf.store((new_k_cache, new_v_cache))
         else:  # decoding
             print('self attention decode =======')
             self.prefill = False
             
             mask, donate[1] = attention_mask.val.smart_copy(self.attention_compute)
+            
             (k_cache, donate[12]), (v_cache, donate[13]) = cache_read_buf.pop()
+            
             h, new_k_cache, new_v_cache = self.compute.mha_gen(h, mask, w_q,
                 b_q, w_k, b_k, w_v, b_v, w_out, b_out, w_ln, b_ln, n_head,
                 k_cache, v_cache, donate, self.policy.attn_sparsity,
                 self.policy.compress_cache, self.policy.comp_cache_config)
+            
             cache_write_buf.store((new_k_cache, new_v_cache))
 
         hidden.val = h

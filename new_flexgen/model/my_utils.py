@@ -20,7 +20,8 @@ import math
 import torch
 import sys
 sys.path.insert(0,'..')
-sys.path.insert(0,'../mpu/')
+# sys.path.insert(0,'../mpu/')
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/mpu')
 from global_vars import get_args
 
 def init_method_normal(sigma):

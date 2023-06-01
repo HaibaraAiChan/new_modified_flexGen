@@ -1,6 +1,8 @@
 import os
 import numpy as np
-from utils import init_weight_list
+import sys
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/flexgen_additional')
+from flexgen_utils import init_weight_list
 
 class InputEmbed:
     def __init__(self, config, env, policy):

@@ -21,11 +21,15 @@ import time
 from functools import reduce
 import operator
 import torch
+
+
 import sys
 sys.path.insert(0,'..')
-sys.path.insert(0,'../tokenizer/')
+# sys.path.insert(0,'../tokenizer/')
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen')
+from dist_signal_handler import DistributedSignalHandler
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/tokenizer')
 
-import dist_signal_handler
 from tokenizer import build_tokenizer
 from microbatches import build_num_microbatches_calculator
 
@@ -94,7 +98,7 @@ def get_global_memory_buffer():
 def _set_signal_handler():
     global _GLOBAL_SIGNAL_HANDLER
     _ensure_var_is_not_initialized(_GLOBAL_SIGNAL_HANDLER, 'signal handler')
-    _GLOBAL_SIGNAL_HANDLER = dist_signal_handler.DistributedSignalHandler().__enter__()
+    _GLOBAL_SIGNAL_HANDLER = DistributedSignalHandler().__enter__()
 
 
 

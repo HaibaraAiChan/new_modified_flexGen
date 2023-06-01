@@ -5,15 +5,18 @@ from input_layer import InputEmbed
 from output_layer import OutputEmbed
 
 from typing import Union, List, Optional
-from flexgen.compression import CompressionConfig
-from flexgen.opt_config import OptConfig, get_opt_config, download_opt_weights
-from utils import Policy, ExecutionEnv,ValueHolder, array_2d, array_1d, array_3d, Task
 import time
 import os
 import torch
 import numpy as np
 from tqdm import tqdm
-from flexgen.timer import timers
+
+import sys
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/flexgen_additional')
+from compression import CompressionConfig
+from opt_config import OptConfig, get_opt_config, download_opt_weights
+from flexgen_utils import Policy, ExecutionEnv,ValueHolder, array_2d, array_1d, array_3d, Task
+from timers import timers
 
 DUMMY_WEIGHT = "_DUMMY_"  # Use dummy weights for benchmark purposes
 # class Policy:

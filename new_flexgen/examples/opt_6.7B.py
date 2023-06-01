@@ -14,26 +14,28 @@ import numpy as np
 from tqdm import tqdm
 import torch
 from transformers import AutoTokenizer
+import sys
+sys.path.insert(0,'..')
+# sys.path.insert(0,'../flexgen_additional/')
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/flexgen_additional')
 
-from flexgen.compression import CompressionConfig
-from flexgen.opt_config import OptConfig, get_opt_config, download_opt_weights
-from flexgen.pytorch_backend import (TorchDevice, TorchDisk, TorchLink,
+from compression import CompressionConfig
+from opt_config import OptConfig, get_opt_config, download_opt_weights
+from pytorch_backend import (TorchDevice, TorchDisk, TorchLink,
     TorchMixedDevice, DeviceType, general_copy, fix_recursive_import)
-from flexgen.timer import timers
-from flexgen.utils import (Task, ExecutionEnv, GB, T, ValueHolder,
+from timers import timers
+from flexgen_utils import (Task, ExecutionEnv, GB, T, ValueHolder,
     array_1d, array_2d, array_3d, str2bool, project_decode_latency,
     torch_mem_stats, torch_dtype_to_np_dtype, write_benchmark_log,
     read_benchmark_log)
-import sys
-sys.path.insert(0,'..')
-sys.path.insert(0,'../flexgen_additional/')
-sys.path.insert(0,'../model/')
+# sys.path.insert(0,'../model')
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/model')
 from self_attention_layer import SelfAttention
 from MLP_layer import MLP
 from transformer_layer import TransformerLayer
 from input_layer import InputEmbed
 from output_layer import OutputEmbed
-from utils import init_weight_list, Policy
+from flexgen_utils import init_weight_list, Policy
 from optLM_model import OptLM
 fix_recursive_import()
 

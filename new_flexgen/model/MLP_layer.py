@@ -1,6 +1,8 @@
 import os
 import numpy as np 
-from utils import torch_dtype_to_np_dtype
+import sys
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/flexgen_additional')
+from flexgen_utils import torch_dtype_to_np_dtype
 DUMMY_WEIGHT = "_DUMMY_"  # Use dummy weights for benchmark purposes
 
 def get_choice(cur_percent, percents, choices):

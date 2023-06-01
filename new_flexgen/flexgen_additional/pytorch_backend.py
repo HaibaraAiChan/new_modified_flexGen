@@ -11,16 +11,22 @@ from typing import Optional, Union, Tuple
 
 import torch
 import torch.nn.functional as F
-from fused_layer_norm import FusedLayerNorm
+
 import numpy as np
 import sys
 sys.path.insert(0,'.')
+import sys
+sys.path.insert(0,'..')
+# sys.path.insert(0,'../flexgen_additional/')
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/flexgen_additional')
 # from memory_usage import see_memory_usage
 # from cpu_mem_usage import get_memory
 
-from flexgen.utils import (GB, T, cpu_mem_stats, vector_gather,
+from flexgen_utils import (GB, T, cpu_mem_stats, vector_gather,
     np_dtype_to_torch_dtype, torch_dtype_to_np_dtype,
     torch_dtype_to_num_bytes)
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/model')
+from fused_layer_norm import FusedLayerNorm
 
 general_copy_compressed = TorchCompressedDevice = None
 global_cpu_device = None
@@ -315,8 +321,12 @@ class TorchDevice:
         b, s, h = inputs.shape
         head_dim = h // n_head
         scaling = head_dim ** -0.5
+        
+        # modified start--------------
         hidden = FusedLayerNorm()
+        # modified --------------end
         hidden = F.layer_norm(inputs.data, (h,), weight=w_ln.data, bias=b_ln.data)
+        
         
         # see_memory_usage('---------================-------------------before q, k, v \n')
         # get_memory('---------================-------------------before q, k, v \n')
@@ -390,8 +400,15 @@ class TorchDevice:
         src_s = attention_mask.shape[1]
         head_dim = h // n_head
         scaling = head_dim ** -0.5
-
-        hidden = F.layer_norm(inputs.data, (h,), weight=w_ln.data, bias=b_ln.data)
+        
+        #--------------------------- modified start
+        post_attention_layernorm = FusedLayerNorm( h, sequence_parallel=True)
+        hidden_1 = post_attention_layernorm(inputs.data,weight=w_ln.data, bias=b_ln.data )
+        print(hidden_1)
+        
+        print('return ')
+        return
+        # hidden = F.layer_norm(inputs.data, (h,), weight=w_ln.data, bias=b_ln.data)
 
         # shape: (b, 1, h)
         q = F.linear(hidden, w_q.data, bias=b_q.data) * scaling

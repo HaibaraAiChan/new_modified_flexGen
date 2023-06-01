@@ -20,7 +20,7 @@ from torch.autograd import Variable
 from torch.nn.parameter import Parameter
 import sys
 sys.path.insert(0,'..')
-sys.path.insert(0,'../mpu/')
+sys.path.insert(0,'/home/cc/FlexGen/new_flexgen/mpu/')
 from global_vars  import get_args
 from initialize import is_pipeline_first_stage, is_pipeline_last_stage, get_embedding_group, get_position_embedding_group, is_rank_in_position_embedding_group, is_rank_in_embedding_group
 from layers import VocabParallelEmbedding
