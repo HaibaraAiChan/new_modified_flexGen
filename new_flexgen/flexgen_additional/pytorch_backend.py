@@ -323,7 +323,10 @@ class TorchDevice:
         scaling = head_dim ** -0.5
         
         # modified start--------------
-        hidden = FusedLayerNorm()
+        post_attention_layernorm = FusedLayerNorm( h, sequence_parallel=True)
+        hidden_1 = post_attention_layernorm(inputs.data,weight=w_ln.data, bias=b_ln.data )
+        print(hidden_1)
+        return
         # modified --------------end
         hidden = F.layer_norm(inputs.data, (h,), weight=w_ln.data, bias=b_ln.data)
         
